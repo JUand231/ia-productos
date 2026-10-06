@@ -1,0 +1,27 @@
+# Java / Tomcat
+target/
+build/
+*.class
+*.war
+*.jar
+out/
+
+# NetBeans / Eclipse / VSCode
+nbproject/
+.classpath
+.project
+.settings/
+nb-configuration.xml
+.idea/
+*.iml
+.vscode/
+
+# Secretos - NUNCA subir KEY
+.env
+config.properties
+*key*.txt
+*KEY*.txt
+
+# OS
+.DS_Store
+Thumbs.db
