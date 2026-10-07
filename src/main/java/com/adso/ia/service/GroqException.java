@@ -1,6 +1,7 @@
 package com.adso.ia.service;
 
 public class GroqException extends Exception {
+
     private final int codigoHttp;
 
     public GroqException(int codigoHttp, String mensaje) {
@@ -8,5 +9,7 @@ public class GroqException extends Exception {
         this.codigoHttp = codigoHttp;
     }
 
-    public int getCodigoHttp() { return codigoHttp; }
+    public int getCodigoHttp() {
+        return codigoHttp;
+    }
 }

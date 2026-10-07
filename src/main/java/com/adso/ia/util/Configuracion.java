@@ -7,7 +7,7 @@ import java.util.Properties;
 public class Configuracion {
 
     // Ajusta la ruta al nombre real de tu paquete dentro de resources
-    private static final String RUTA = "/config/config.properties";
+    private static final String RUTA = "/config.properties";
 
     public static String getGroqKey() {
         Properties props = new Properties();
