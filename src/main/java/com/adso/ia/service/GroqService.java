@@ -21,23 +21,28 @@ public class GroqService {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
-    public RespuestaIA preguntar(String producto, String prompt, double temperature)
+    public RespuestaIA preguntar(String system, String user, double temperature)
             throws GroqException {
 
         // 1. Armar el JSON que se envía: {model, messages, temperature, max_tokens}
-        JsonObject mensaje = new JsonObject();
-        mensaje.addProperty("role", "user");
-        mensaje.addProperty("content", prompt + "\n\n" + producto);
+        JsonObject mensajeSystem = new JsonObject();
+        mensajeSystem.addProperty("role", "system");
+        mensajeSystem.addProperty("content", system);
+        
+        JsonObject mensajeUser = new JsonObject();
+        mensajeUser.addProperty("role", "user");
+        mensajeUser.addProperty("content", user);
 
         JsonArray mensajes = new JsonArray();
-        mensajes.add(mensaje);
+        mensajes.add(mensajeSystem);
+        mensajes.add(mensajeUser);
 
         JsonObject cuerpo = new JsonObject();
         cuerpo.addProperty("model", MODELO);
         cuerpo.add("messages", mensajes);
         cuerpo.addProperty("temperature", temperature);
         cuerpo.addProperty("max_completion_tokens", 1024);
-        cuerpo.addProperty("reasoning_effort", "low"); // ver nota abajo
+        cuerpo.addProperty("reasoning_effort", "low");
 
         // 2. Armar la petición HTTP POST con la key en la cabecera Authorization
         HttpRequest peticion = HttpRequest.newBuilder()
