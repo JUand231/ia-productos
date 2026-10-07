@@ -1,16 +1,22 @@
-<form action="ia" method="post">
-  <label>Producto:</label>
-  <input name="producto" value="Audífonos inalámbricos $150.000, batería 20 horas">
-  <br>
-  <label>Estilo:</label>
-  <select name="tipoPrompt">
-    <option value="tecnico">Técnico</option>
-    <option value="publicitario">Publicitario</option>
-    <option value="seo">SEO</option>
-  </select>
-  <br>
-  <label>Temperatura (0 a 1):</label>
-  <input name="temperature" value="0.7">
-  <br>
-  <button>Probar</button>
-</form>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+    <head><meta charset="UTF-8"></head>
+    <body>
+        <form action="ia" method="post">
+            <label>Producto:</label>
+            <input name="producto" value="AudiÂ­fonos inalambricos $150.000, bateriÂ­a 20 horas">
+            <br>
+            <label>Estilo:</label>
+            <select name="tipoPrompt">
+                <option value="tecnico">Tecnico</option>
+                <option value="publicitario">Publicitario</option>
+                <option value="seo">SEO</option>
+            </select>
+            <br>
+            <label>Temperatura (0 a 1):</label>
+            <input name="temperature" value="0.7">
+            <br>
+            <button>Probar</button>
+        </form>
+    </body>
+</html>
