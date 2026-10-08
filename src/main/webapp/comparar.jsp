@@ -408,21 +408,13 @@
             </div>
             <div class="history-category">Menú</div>
             <ul class="history-list">
-                <li class="history-item active"><a href="index.jsp" style="color:inherit;text-decoration:none">💬 Pregunta libre</a></li>
-                <li class="history-item"><a href="comparar.jsp" style="color:inherit;text-decoration:none">⚖️ Comparador</a></li>
+                <li class="history-item"><a href="index.jsp" style="color:inherit;text-decoration:none">💬 Pregunta libre</a></li>
+                <li class="history-item active"><a href="comparar.jsp" style="color:inherit;text-decoration:none">⚖️ Comparador</a></li>
                 <li class="history-item"><a href="prompts.jsp" style="color:inherit;text-decoration:none">💡 Prompts</a></li>
             </ul>
-            <div class="history-category">🎭 Tipo de respuesta</div>
-            <select name="tipoRespuesta" form="iaForm" style="width:100%;border:1px solid #C5D9E8;border-radius:8px;padding:8px;font-size:0.85rem;background:#fff;">
-                <option value="normal" selected>Normal</option>
-                <option value="tecnico">Técnico</option>
-                <option value="publicitario">Publicitario</option>
-                <option value="resena">Reseña</option>
-                <option value="seo">SEO</option>
-            </select>
             <div class="history-category">🌡️ Creatividad</div>
             <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">
-                <input name="temperature" form="iaForm" type="number" value="0.7" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
+                <input name="temperature" form="cmpForm" type="number" value="0.7" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
                 <span style="color:#7893A6;">0 serio · 1 creativo</span>
             </div>
         </div>
@@ -435,38 +427,59 @@
     <!-- CHAT PRINCIPAL -->
     <div class="chat-container">
         <div class="chat-header">
-            <span class="chat-title">Pregunta libre</span>
+            <span class="chat-title">Comparador</span>
         </div>
 
-        <!-- MENSAJES: bienvenida o la última respuesta en la misma pantalla -->
+        <!-- PANELES DIVIDIDOS: mismo prompt, un tipo por lado -->
         <div class="chat-messages" id="chatMessages">
-            <% if (request.getAttribute("respuesta") != null || request.getAttribute("error") != null) { %>
-            <div class="message-wrapper user">
-                <div class="message-bubble">${pregunta}</div>
-            </div>
             <% if (request.getAttribute("error") != null) { %>
-            <div class="message-wrapper ai">
-                <div class="message-bubble" style="background:#C0392B;color:#fff;border:none;">${error}</div>
-            </div>
+            <p style="color:#fff;background:#C0392B;border-radius:8px;padding:10px;">${error}</p>
             <% } %>
-            <% if (request.getAttribute("respuesta") != null) { %>
-            <div class="message-wrapper ai">
-                <div class="message-bubble">${respuesta.texto}<br><br><small style="color:#7893A6;">Tokens: ${respuesta.tokensEntrada} + ${respuesta.tokensSalida} = ${respuesta.tokensTotal}</small></div>
+            <div style="display:flex;gap:12px;width:100%;flex:1;align-items:stretch;min-height:60vh;">
+                <div style="flex:1;display:flex;flex-direction:column;background:#fff;border:1px solid #C5D9E8;border-radius:10px;padding:12px;overflow-y:auto;min-height:320px;">
+                    <div style="display:flex;justify-content:flex-start;margin-bottom:8px;">
+                        <select name="tipoA" form="cmpForm" title="Tipo de respuesta izquierda" style="border:1px solid #C5D9E8;border-radius:20px;padding:6px 14px;font-size:0.85rem;background:#D9EAF5;color:#3F6F8F;">
+                            <option value="normal">Normal</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="publicitario" selected>Publicitario</option>
+                            <option value="resena">Reseña</option>
+                            <option value="seo">SEO</option>
+                        </select>
+                    </div>
+                    <% if (request.getAttribute("respuestaA") != null) { %>
+                    <h4 style="color:#3F6F8F;">⬅️ ${tipoA}</h4>
+                    <p style="white-space:pre-wrap;flex:1;">${respuestaA.texto}</p>
+                    <small style="color:#7893A6;">Tokens: ${respuestaA.tokensTotal}</small>
+                    <% } else { %>
+                    <p style="color:#7893A6;">⬅️ Aquí saldrá la respuesta izquierda…</p>
+                    <% } %>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;background:#fff;border:1px solid #C5D9E8;border-radius:10px;padding:12px;overflow-y:auto;min-height:320px;">
+                    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+                        <select name="tipoB" form="cmpForm" title="Tipo de respuesta derecha" style="border:1px solid #C5D9E8;border-radius:20px;padding:6px 14px;font-size:0.85rem;background:#D9EAF5;color:#3F6F8F;">
+                            <option value="normal" selected>Normal</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="publicitario">Publicitario</option>
+                            <option value="resena">Reseña</option>
+                            <option value="seo">SEO</option>
+                        </select>
+                    </div>
+                    <% if (request.getAttribute("respuestaB") != null) { %>
+                    <h4 style="color:#3F6F8F;">${tipoB} ➡️</h4>
+                    <p style="white-space:pre-wrap;flex:1;">${respuestaB.texto}</p>
+                    <small style="color:#7893A6;">Tokens: ${respuestaB.tokensTotal}</small>
+                    <% } else { %>
+                    <p style="color:#7893A6;">Aquí saldrá la respuesta derecha… ➡️</p>
+                    <% }%>
+                </div>
             </div>
-            <% } %>
-            <% } else { %>
-            <div class="welcome-screen" id="welcomeScreen">
-                <h2>¡Hola! 👋</h2>
-                <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
-            </div>
-            <% }%>
         </div>
 
-        <!-- INPUT DEL CHAT: form real al Servlet /ia -->
+        <!-- INPUT ÚNICO: un prompt para los dos lados -->
         <div class="chat-input-area">
             <div class="input-box-wrapper">
-                <form id="iaForm" action="ia" method="post">
-                    <textarea placeholder="Ej: Producto: Audífonos $150.000, batería 20h. Dame una reseña." rows="1" id="userInput" name="pregunta"></textarea>
+                <form id="cmpForm" action="comparar" method="post">
+                    <textarea placeholder="Ej: Producto: Audífonos $150.000, batería 20h. Descríbelo." rows="1" id="userInput" name="pregunta">${pregunta}</textarea>
 
                     <!-- MARCA DE AGUA -->
                     <div class="input-watermark">
@@ -488,20 +501,13 @@
     <!-- JAVASCRIPT -->
     <script>
         function startNewChat() {
-            const messages = document.getElementById('chatMessages');
-            messages.innerHTML = `
-                <div class="welcome-screen" id="welcomeScreen">
-                    <h2>¡Hola! 👋</h2>
-                    <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
-                </div>
-            `;
-            document.getElementById('userInput').value = '';
-            document.getElementById('userInput').style.height = 'auto';
+            // Limpia todo volviendo al comparador vacío
+            window.location.href = 'comparar.jsp';
         }
 
         function sendMessage() {
-            // Envío real: el form hace POST al Servlet /ia
-            document.getElementById('iaForm').submit();
+            // Envío real: el form hace POST al Servlet /comparar
+            document.getElementById('cmpForm').submit();
         }
 
         // Tema claro/oscuro: guarda tu elección en el navegador
@@ -511,7 +517,7 @@
             localStorage.setItem('nexus-theme', dark ? 'dark' : 'light');
             document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
         }
-        (function() {
+        (function () {
             if (localStorage.getItem('nexus-theme') === 'dark') {
                 document.body.classList.add('dark');
                 document.getElementById('themeBtn').textContent = '☀️';

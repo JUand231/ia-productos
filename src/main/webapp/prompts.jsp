@@ -408,23 +408,10 @@
             </div>
             <div class="history-category">Menú</div>
             <ul class="history-list">
-                <li class="history-item active"><a href="index.jsp" style="color:inherit;text-decoration:none">💬 Pregunta libre</a></li>
+                <li class="history-item"><a href="index.jsp" style="color:inherit;text-decoration:none">💬 Pregunta libre</a></li>
                 <li class="history-item"><a href="comparar.jsp" style="color:inherit;text-decoration:none">⚖️ Comparador</a></li>
-                <li class="history-item"><a href="prompts.jsp" style="color:inherit;text-decoration:none">💡 Prompts</a></li>
+                <li class="history-item active"><a href="prompts.jsp" style="color:inherit;text-decoration:none">💡 Prompts</a></li>
             </ul>
-            <div class="history-category">🎭 Tipo de respuesta</div>
-            <select name="tipoRespuesta" form="iaForm" style="width:100%;border:1px solid #C5D9E8;border-radius:8px;padding:8px;font-size:0.85rem;background:#fff;">
-                <option value="normal" selected>Normal</option>
-                <option value="tecnico">Técnico</option>
-                <option value="publicitario">Publicitario</option>
-                <option value="resena">Reseña</option>
-                <option value="seo">SEO</option>
-            </select>
-            <div class="history-category">🌡️ Creatividad</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">
-                <input name="temperature" form="iaForm" type="number" value="0.7" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
-                <span style="color:#7893A6;">0 serio · 1 creativo</span>
-            </div>
         </div>
         <div class="sidebar-footer">
             <span>Equipo ADSO</span>
@@ -432,76 +419,128 @@
         </div>
     </sidebar>
 
-    <!-- CHAT PRINCIPAL -->
+    <!-- GALERÍA DE PROMPTS -->
     <div class="chat-container">
         <div class="chat-header">
-            <span class="chat-title">Pregunta libre</span>
+            <span class="chat-title">💡 Galería de prompts</span>
         </div>
 
-        <!-- MENSAJES: bienvenida o la última respuesta en la misma pantalla -->
-        <div class="chat-messages" id="chatMessages">
-            <% if (request.getAttribute("respuesta") != null || request.getAttribute("error") != null) { %>
-            <div class="message-wrapper user">
-                <div class="message-bubble">${pregunta}</div>
-            </div>
-            <% if (request.getAttribute("error") != null) { %>
-            <div class="message-wrapper ai">
-                <div class="message-bubble" style="background:#C0392B;color:#fff;border:none;">${error}</div>
-            </div>
-            <% } %>
-            <% if (request.getAttribute("respuesta") != null) { %>
-            <div class="message-wrapper ai">
-                <div class="message-bubble">${respuesta.texto}<br><br><small style="color:#7893A6;">Tokens: ${respuesta.tokensEntrada} + ${respuesta.tokensSalida} = ${respuesta.tokensTotal}</small></div>
-            </div>
-            <% } %>
-            <% } else { %>
-            <div class="welcome-screen" id="welcomeScreen">
-                <h2>¡Hola! 👋</h2>
-                <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
-            </div>
-            <% }%>
-        </div>
+        <div class="chat-messages" id="chatMessages" style="align-items:stretch;">
+            <style>
+                .prompt-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; }
+                .p-card { background:var(--bg-card); border:1px solid var(--border-color); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px; }
+                .p-card h3 { color:var(--accent-blue); font-size:0.95rem; }
+                .p-card p { font-size:0.85rem; white-space:pre-wrap; background:var(--bg-main); border-radius:8px; padding:10px; flex:1; }
+                .p-card button { align-self:flex-end; background:var(--chat-user-bg); color:var(--accent-blue); border:1px solid var(--border-color); border-radius:20px; padding:5px 14px; cursor:pointer; font-size:0.8rem; }
+                .p-card button:hover { background:var(--accent-blue); color:#fff; }
+            </style>
+            <p style="color:var(--text-muted);font-size:0.9rem;">Copia uno, pégalo en el chat y envíalo. Cada uno muestra una respuesta distinta.</p>
+            <div class="prompt-grid">
 
-        <!-- INPUT DEL CHAT: form real al Servlet /ia -->
-        <div class="chat-input-area">
-            <div class="input-box-wrapper">
-                <form id="iaForm" action="ia" method="post">
-                    <textarea placeholder="Ej: Producto: Audífonos $150.000, batería 20h. Dame una reseña." rows="1" id="userInput" name="pregunta"></textarea>
+<div class="p-card"><h3>1. Descripción corta</h3><p>Producto: Tenis deportivos
+Precio: $280.000
+Suela antideslizante, tallas 38 a 44.
+Descríbelo en 2 frases.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-                    <!-- MARCA DE AGUA -->
-                    <div class="input-watermark">
-                        Nexus es una IA y puede cometer errores.
-                    </div>
+<div class="p-card"><h3>2. Descripción publicitaria</h3><p>Producto: Café orgánico 500g
+Precio: $32.000
+Origen Huila, tueste medio.
+Escribe una descripción publicitaria corta para tienda online.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-                    <!-- BOTÓN ENVIAR -->
-                    <button class="send-btn" type="submit" aria-label="Enviar mensaje">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </form>
+<div class="p-card"><h3>3. Reseña honesta</h3><p>Producto: Audífonos inalámbricos
+Precio: $150.000
+Batería 20 horas, Bluetooth 5.3.
+Dame una reseña honesta con pros y contras.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>4. Pros y contras</h3><p>Producto: Mochila escolar
+Precio: $95.000
+Capacidad 25 litros, material impermeable.
+Dame 3 pros y 3 contras en lista.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>5. Título + bullets</h3><p>Producto: Reloj inteligente
+Precio: $199.000
+Monitor de sueño y ritmo cardíaco.
+Dame un título atractivo y 3 bullets de venta.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>6. Texto SEO</h3><p>Producto: Jabón artesanal de avena
+Precio: $12.000
+Piel sensible, 100g.
+Escribe título SEO y descripción con palabras clave.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>7. Post Instagram</h3><p>Producto: Gorra bordada
+Precio: $45.000
+Talla única ajustable.
+Escríbeme un post corto para Instagram con 3 hashtags.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>8. Mensaje WhatsApp</h3><p>Producto: Anchetas de cumpleaños
+Precio: $75.000
+Incluye tarjeta personalizada.
+Escríbelo en 1 frase para vender por WhatsApp.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>9. Correo lanzamiento</h3><p>Producto: Termo acero 750ml
+Precio: $60.000
+Frío 24h, calor 12h.
+Redacta un correo corto anunciando su lanzamiento.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>10. Sugerir precio</h3><p>Producto: Velas aromáticas
+Me cuesta hacerlo: $18.000
+Quiero ganar el 40%.
+¿A cuánto lo vendo y por qué?</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>11. Comparar 2 productos</h3><p>Producto A: Audífonos $150.000, batería 20h.
+Producto B: Audífonos $220.000, batería 40h y cancelación de ruido.
+¿Cuál conviene y por qué?</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>12. Ideas de nombre</h3><p>Producto: Mermelada de mora hecha en casa
+Precio: $15.000 frasco.
+Dame 5 ideas de nombre para la marca.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>13. Eslogan</h3><p>Producto: Panadería de barrio
+Pan fresco desde las 5am.
+Dame 3 eslóganes cortos.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>14. Responder objeción</h3><p>Producto: Curso de repostería
+Precio: $120.000, 4 clases.
+Un cliente dice "está muy caro". Dame una respuesta amable que lo convenza.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>15. Ficha técnica</h3><p>Producto: Bicicleta urbana
+Precio: $850.000
+Rin 29, 21 cambios, freno de disco.
+Haz una ficha técnica ordenada.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>16. Traducir al inglés</h3><p>Producto: Ruana de lana
+Precio: $110.000
+Tejido a mano en Boyacá.
+Traduce su descripción al inglés para vender a turistas.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>17. Ideas de fotos</h3><p>Producto: Aretes de plata
+Precio: $55.000
+Dame 5 ideas de fotos para publicarlos en redes.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>18. Armar combo</h3><p>Producto A: Shampoo sólido $25.000.
+Producto B: Acondicionador sólido $28.000.
+Arma una oferta combo con precio y texto de venta.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>19. Preguntas frecuentes</h3><p>Producto: Domicilios de almuerzo
+Precio: $14.000, entrega 30 min.
+Escríbeme 3 preguntas frecuentes con sus respuestas.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>20. Para regalo</h3><p>Producto: Kit de cuidado facial
+Precio: $89.000, 4 pasos.
+Véndelo como regalo del día de la madre en 2 frases emotivas.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
             </div>
         </div>
     </div>
 
     <!-- JAVASCRIPT -->
     <script>
-        function startNewChat() {
-            const messages = document.getElementById('chatMessages');
-            messages.innerHTML = `
-                <div class="welcome-screen" id="welcomeScreen">
-                    <h2>¡Hola! 👋</h2>
-                    <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
-                </div>
-            `;
-            document.getElementById('userInput').value = '';
-            document.getElementById('userInput').style.height = 'auto';
-        }
-
-        function sendMessage() {
-            // Envío real: el form hace POST al Servlet /ia
-            document.getElementById('iaForm').submit();
+        function copiar(btn) {
+            var t = btn.parentElement.querySelector('p').innerText;
+            navigator.clipboard.writeText(t).then(function() {
+                btn.textContent = '✅ ¡Copiado! Pégalo en el chat';
+                setTimeout(function(){ btn.textContent = '📋 Copiar'; }, 2000);
+            });
         }
 
         // Tema claro/oscuro: guarda tu elección en el navegador
@@ -517,19 +556,6 @@
                 document.getElementById('themeBtn').textContent = '☀️';
             }
         })();
-
-        const textarea = document.getElementById('userInput');
-        textarea.addEventListener('input', function () {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-        });
-
-        textarea.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
     </script>
 </body>
 </html>
