@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.adso.ia.model.RespuestaIA" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -414,7 +415,7 @@
             </ul>
             <div class="history-category">🌡️ Creatividad</div>
             <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">
-                <input name="temperature" form="cmpForm" type="number" value="0.7" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
+                <input name="temperature" form="cmpForm" type="number" value="<%= request.getAttribute("tempVal") != null ? request.getAttribute("tempVal") : "0.7" %>" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
                 <span style="color:#7893A6;">0 serio · 1 creativo</span>
             </div>
         </div>
@@ -438,17 +439,18 @@
             <div style="display:flex;gap:12px;width:100%;flex:1;align-items:stretch;min-height:60vh;">
                 <div style="flex:1;display:flex;flex-direction:column;background:#fff;border:1px solid #C5D9E8;border-radius:10px;padding:12px;overflow-y:auto;min-height:320px;">
                     <div style="display:flex;justify-content:flex-start;margin-bottom:8px;">
+                        <% String tipoAVal = (String) request.getAttribute("tipoAVal"); if (tipoAVal == null) tipoAVal = "publicitario"; %>
                         <select name="tipoA" form="cmpForm" title="Tipo de respuesta izquierda" style="border:1px solid #C5D9E8;border-radius:20px;padding:6px 14px;font-size:0.85rem;background:#D9EAF5;color:#3F6F8F;">
-                            <option value="normal">Normal</option>
-                            <option value="tecnico">Técnico</option>
-                            <option value="publicitario" selected>Publicitario</option>
-                            <option value="resena">Reseña</option>
-                            <option value="seo">SEO</option>
+                            <option value="normal" <%= "normal".equals(tipoAVal) ? "selected" : "" %>>Normal</option>
+                            <option value="tecnico" <%= "tecnico".equals(tipoAVal) ? "selected" : "" %>>Técnico</option>
+                            <option value="publicitario" <%= "publicitario".equals(tipoAVal) ? "selected" : "" %>>Publicitario</option>
+                            <option value="resena" <%= "resena".equals(tipoAVal) ? "selected" : "" %>>Reseña</option>
+                            <option value="seo" <%= "seo".equals(tipoAVal) ? "selected" : "" %>>SEO</option>
                         </select>
                     </div>
                     <% if (request.getAttribute("respuestaA") != null) { %>
                     <h4 style="color:#3F6F8F;">⬅️ ${tipoA}</h4>
-                    <p style="white-space:pre-wrap;flex:1;">${respuestaA.texto}</p>
+                    <p style="flex:1;"><%= ((RespuestaIA) request.getAttribute("respuestaA")).getTextoHtml() %></p>
                     <small style="color:#7893A6;">Tokens: ${respuestaA.tokensTotal}</small>
                     <% } else { %>
                     <p style="color:#7893A6;">⬅️ Aquí saldrá la respuesta izquierda…</p>
@@ -456,17 +458,18 @@
                 </div>
                 <div style="flex:1;display:flex;flex-direction:column;background:#fff;border:1px solid #C5D9E8;border-radius:10px;padding:12px;overflow-y:auto;min-height:320px;">
                     <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+                        <% String tipoBVal = (String) request.getAttribute("tipoBVal"); if (tipoBVal == null) tipoBVal = "normal"; %>
                         <select name="tipoB" form="cmpForm" title="Tipo de respuesta derecha" style="border:1px solid #C5D9E8;border-radius:20px;padding:6px 14px;font-size:0.85rem;background:#D9EAF5;color:#3F6F8F;">
-                            <option value="normal" selected>Normal</option>
-                            <option value="tecnico">Técnico</option>
-                            <option value="publicitario">Publicitario</option>
-                            <option value="resena">Reseña</option>
-                            <option value="seo">SEO</option>
+                            <option value="normal" <%= "normal".equals(tipoBVal) ? "selected" : "" %>>Normal</option>
+                            <option value="tecnico" <%= "tecnico".equals(tipoBVal) ? "selected" : "" %>>Técnico</option>
+                            <option value="publicitario" <%= "publicitario".equals(tipoBVal) ? "selected" : "" %>>Publicitario</option>
+                            <option value="resena" <%= "resena".equals(tipoBVal) ? "selected" : "" %>>Reseña</option>
+                            <option value="seo" <%= "seo".equals(tipoBVal) ? "selected" : "" %>>SEO</option>
                         </select>
                     </div>
                     <% if (request.getAttribute("respuestaB") != null) { %>
                     <h4 style="color:#3F6F8F;">${tipoB} ➡️</h4>
-                    <p style="white-space:pre-wrap;flex:1;">${respuestaB.texto}</p>
+                    <p style="flex:1;"><%= ((RespuestaIA) request.getAttribute("respuestaB")).getTextoHtml() %></p>
                     <small style="color:#7893A6;">Tokens: ${respuestaB.tokensTotal}</small>
                     <% } else { %>
                     <p style="color:#7893A6;">Aquí saldrá la respuesta derecha… ➡️</p>

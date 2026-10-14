@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.List,com.adso.ia.model.MensajeChat" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -413,16 +414,17 @@
                 <li class="history-item"><a href="prompts.jsp" style="color:inherit;text-decoration:none">💡 Prompts</a></li>
             </ul>
             <div class="history-category">🎭 Tipo de respuesta</div>
+            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
             <select name="tipoRespuesta" form="iaForm" style="width:100%;border:1px solid #C5D9E8;border-radius:8px;padding:8px;font-size:0.85rem;background:#fff;">
-                <option value="normal" selected>Normal</option>
-                <option value="tecnico">Técnico</option>
-                <option value="publicitario">Publicitario</option>
-                <option value="resena">Reseña</option>
-                <option value="seo">SEO</option>
+                <option value="normal" <%= "normal".equals(tipoSel) ? "selected" : "" %>>Normal</option>
+                <option value="tecnico" <%= "tecnico".equals(tipoSel) ? "selected" : "" %>>Técnico</option>
+                <option value="publicitario" <%= "publicitario".equals(tipoSel) ? "selected" : "" %>>Publicitario</option>
+                <option value="resena" <%= "resena".equals(tipoSel) ? "selected" : "" %>>Reseña</option>
+                <option value="seo" <%= "seo".equals(tipoSel) ? "selected" : "" %>>SEO</option>
             </select>
             <div class="history-category">🌡️ Creatividad</div>
             <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">
-                <input name="temperature" form="iaForm" type="number" value="0.7" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
+                <input name="temperature" form="iaForm" type="number" value="<%= request.getAttribute("tempSel") != null ? request.getAttribute("tempSel") : "0.7" %>" min="0" max="2" step="0.1" title="0 serio, 1 creativo" style="width:65px;border:1px solid #C5D9E8;border-radius:8px;padding:4px 6px;">
                 <span style="color:#7893A6;">0 serio · 1 creativo</span>
             </div>
         </div>
@@ -436,30 +438,30 @@
     <div class="chat-container">
         <div class="chat-header">
             <span class="chat-title">Pregunta libre</span>
+            <a href="ia?limpiar=1" title="Borrar el historial y empezar de cero" style="margin-left:auto;background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;padding:5px 14px;font-size:0.8rem;color:var(--accent-blue);text-decoration:none;">Limpiar</a>
         </div>
 
-        <!-- MENSAJES: bienvenida o la última respuesta en la misma pantalla -->
+        <!-- MENSAJES: historial completo de la sesión, lo último abajo -->
         <div class="chat-messages" id="chatMessages">
-            <% if (request.getAttribute("respuesta") != null || request.getAttribute("error") != null) { %>
-            <div class="message-wrapper user">
-                <div class="message-bubble">${pregunta}</div>
-            </div>
-            <% if (request.getAttribute("error") != null) { %>
-            <div class="message-wrapper ai">
-                <div class="message-bubble" style="background:#C0392B;color:#fff;border:none;">${error}</div>
-            </div>
-            <% } %>
-            <% if (request.getAttribute("respuesta") != null) { %>
-            <div class="message-wrapper ai">
-                <div class="message-bubble">${respuesta.texto}<br><br><small style="color:#7893A6;">Tokens: ${respuesta.tokensEntrada} + ${respuesta.tokensSalida} = ${respuesta.tokensTotal}</small></div>
-            </div>
-            <% } %>
-            <% } else { %>
+            <% List<MensajeChat> historial = (List<MensajeChat>) session.getAttribute("historial");
+               if (historial == null || historial.isEmpty()) { %>
             <div class="welcome-screen" id="welcomeScreen">
                 <h2>¡Hola! 👋</h2>
                 <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
             </div>
-            <% }%>
+            <% } else { for (MensajeChat m : historial) { %>
+            <div class="message-wrapper user">
+                <div class="message-bubble"><%= m.getPreguntaHtml() %></div>
+            </div>
+            <% if (m.isError()) { %>
+            <div class="message-wrapper ai">
+                <div class="message-bubble" style="background:#C0392B;color:#fff;border:none;"><%= m.getErrorHtml() %></div>
+            </div>
+            <% } else { %>
+            <div class="message-wrapper ai">
+                <div class="message-bubble"><%= m.getRespuesta().getTextoHtml() %><br><br><small style="color:#7893A6;"><%= m.getTipo() %> · Tokens: <%= m.getRespuesta().getTokensEntrada() %> + <%= m.getRespuesta().getTokensSalida() %> = <%= m.getRespuesta().getTokensTotal() %></small></div>
+            </div>
+            <% } } } %>
         </div>
 
         <!-- INPUT DEL CHAT: form real al Servlet /ia -->
@@ -487,18 +489,6 @@
 
     <!-- JAVASCRIPT -->
     <script>
-        function startNewChat() {
-            const messages = document.getElementById('chatMessages');
-            messages.innerHTML = `
-                <div class="welcome-screen" id="welcomeScreen">
-                    <h2>¡Hola! 👋</h2>
-                    <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
-                </div>
-            `;
-            document.getElementById('userInput').value = '';
-            document.getElementById('userInput').style.height = 'auto';
-        }
-
         function sendMessage() {
             // Envío real: el form hace POST al Servlet /ia
             document.getElementById('iaForm').submit();

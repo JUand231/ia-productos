@@ -18,6 +18,17 @@ public class RespuestaIA {
         return texto;
     }
 
+    // Texto listo para pintarlo en el JSP: respeta negrillas y saltos de línea.
+    // Primero escapa el HTML (seguridad) y luego convierte el markdown básico.
+    public String getTextoHtml() {
+        if (texto == null) return "";
+        String h = texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        h = h.replaceAll("\\*\\*(.+?)\\*\\*", "<strong>$1</strong>");
+        h = h.replaceAll("(?m)^\\* ", "• ");
+        h = h.replace("\n", "<br>");
+        return h;
+    }
+
     public int getTokensEntrada() {
         return tokensEntrada;
     }

@@ -1,9 +1,12 @@
 package com.adso.ia.servlet;
 
+import com.adso.ia.model.MensajeChat;
 import com.adso.ia.model.RespuestaIA;
 import com.adso.ia.service.GroqException;
 import com.adso.ia.service.GroqService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,35 +25,49 @@ public class IAServlet extends HttpServlet {
         String producto = req.getParameter("producto");
         String pregunta = req.getParameter("pregunta");
         String tipoRespuesta = req.getParameter("tipoRespuesta");
+        if (tipoRespuesta == null) tipoRespuesta = "normal";
         String temperature = req.getParameter("temperature");
+        if (temperature == null || temperature.isBlank()) temperature = "0.7";
 
-        if (producto == null) producto = "";
         if (pregunta == null || pregunta.isBlank()) pregunta = "Describe este producto.";
-        req.setAttribute("pregunta", pregunta);
 
+        // Para que el sidebar no se reinicie: devolvemos lo que eligió
+        req.setAttribute("tipoSel", tipoRespuesta);
+        req.setAttribute("tempSel", temperature);
+
+        RespuestaIA r = null;
+        String error = null;
         try {
             double temp = Double.parseDouble(temperature);
-            String system = "Eres asistente de tienda online. Responde en español basándote en los datos del producto que te dan: menciónalos en tu respuesta. Si un dato no está, dilo sin inventarlo."
+            // Normal: tono neutro, sin emoción. Con datos se basa en ellos, sin datos usa su memoria.
+            String system = "Eres asistente de tienda online. Responde en español de forma neutra y directa, sin adjetivos emocionales. Si te dan datos de un producto, basate en ellos y menciónalos. Si no te dan datos, responde con tu conocimiento general; si preguntan por datos actuales (precios, rankings, top de ventas), responde con lo más conocido aclarando que tu información llega hasta 2024 y debe verificarse. Separa las ideas con saltos de línea."
                     + tono(tipoRespuesta);
             // Todo llega en una sola caja: datos + instrucción juntos
             String user = (producto == null || producto.isBlank()) ? pregunta
                     : producto + "\n\nInstrucción: " + pregunta;
-            RespuestaIA r = new GroqService().preguntar(system, user, temp);
-            req.setAttribute("respuesta", r);
-            req.getRequestDispatcher("index.jsp").forward(req, res);
+            r = new GroqService().preguntar(system, user, temp);
 
         } catch (GroqException e) {
-            req.setAttribute("error", "Error " + e.getCodigoHttp() + ": " + e.getMessage());
-            req.getRequestDispatcher("index.jsp").forward(req, res);
+            error = "Error " + e.getCodigoHttp() + ": " + e.getMessage();
 
         } catch (NumberFormatException e) {
-            req.setAttribute("error", "La temperatura no es un número válido");
-            req.getRequestDispatcher("index.jsp").forward(req, res);
+            error = "La temperatura no es un número válido";
 
         } catch (Exception e) {
-            req.setAttribute("error", "Error inesperado: " + e.getMessage());
-            req.getRequestDispatcher("index.jsp").forward(req, res);
+            error = "Error inesperado: " + e.getMessage();
         }
+
+        // Historial en la sesión: cada envío se suma a la lista (máximo 20)
+        List<MensajeChat> historial =
+                (List<MensajeChat>) req.getSession().getAttribute("historial");
+        if (historial == null) {
+            historial = new ArrayList<>();
+            req.getSession().setAttribute("historial", historial);
+        }
+        historial.add(new MensajeChat(pregunta, r, error, nombre(tipoRespuesta)));
+        if (historial.size() > 20) historial.remove(0);
+
+        req.getRequestDispatcher("index.jsp").forward(req, res);
     }
 
     // Normal = base neutra. Los demás agregan un matiz al system.
@@ -62,7 +79,19 @@ public class IAServlet extends HttpServlet {
         return "";
     }
 
+    private String nombre(String tipo) {
+        if ("tecnico".equals(tipo)) return "Técnico";
+        if ("publicitario".equals(tipo)) return "Publicitario";
+        if ("resena".equals(tipo)) return "Reseña";
+        if ("seo".equals(tipo)) return "SEO";
+        return "Normal";
+    }
+
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        // ?limpiar=1 borra el historial y empieza un chat nuevo de verdad
+        if ("1".equals(req.getParameter("limpiar"))) {
+            req.getSession().removeAttribute("historial");
+        }
         res.sendRedirect("index.jsp");
     }
 }
