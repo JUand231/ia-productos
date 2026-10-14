@@ -6,12 +6,27 @@ public class RespuestaIA {
     private final int tokensEntrada;
     private final int tokensSalida;
     private final int tokensTotal;
+    private int consultasRestantes = -1; // dato real de Groq (-1 si no vino)
+    private int limiteConsultas = -1;
 
     public RespuestaIA(String texto, int tokensEntrada, int tokensSalida, int tokensTotal) {
         this.texto = texto;
         this.tokensEntrada = tokensEntrada;
         this.tokensSalida = tokensSalida;
         this.tokensTotal = tokensTotal;
+    }
+
+    public void setCuotaConsultas(int restantes, int limite) {
+        this.consultasRestantes = restantes;
+        this.limiteConsultas = limite;
+    }
+
+    public int getConsultasRestantes() {
+        return consultasRestantes;
+    }
+
+    public int getLimiteConsultas() {
+        return limiteConsultas;
     }
 
     public String getTexto() {

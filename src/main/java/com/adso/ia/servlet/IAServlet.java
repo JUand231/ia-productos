@@ -46,6 +46,9 @@ public class IAServlet extends HttpServlet {
             String user = (producto == null || producto.isBlank()) ? pregunta
                     : producto + "\n\nInstrucción: " + pregunta;
             r = new GroqService().preguntar(system, user, temp);
+            // Consultas restantes reales (dato oficial de Groq)
+            req.getSession().setAttribute("consultasRestantes", r.getConsultasRestantes());
+            req.getSession().setAttribute("limiteConsultas", r.getLimiteConsultas());
 
         } catch (GroqException e) {
             error = "Error " + e.getCodigoHttp() + ": " + e.getMessage();

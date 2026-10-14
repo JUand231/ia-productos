@@ -78,6 +78,18 @@
                 transition: transform 0.3s ease;
             }
 
+            /* El bloque de arriba hace scroll si no cabe; el pie (Equipo + tema) siempre visible.
+               Sin barras visibles: la de abajo salía por un margen negativo, la vertical se oculta. */
+            sidebar > div:first-child {
+                min-height: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+                scrollbar-width: none;
+            }
+            sidebar > div:first-child::-webkit-scrollbar {
+                display: none;
+            }
+
             .sidebar-header {
                 display: flex;
                 align-items: center;
@@ -676,6 +688,24 @@
                     max-width: 90%;
                 }
             }
+
+            /* PANTALLAS BAJITAS: compacta las opciones para que quepa el pie sin scroll */
+            @media (max-height: 720px) {
+                .row-desc {
+                    display: none;
+                }
+                .sidebar-header {
+                    margin-bottom: 14px;
+                    padding-bottom: 12px;
+                }
+                .history-category {
+                    margin: 12px 0 8px 6px;
+                }
+                .sidebar-footer {
+                    padding-top: 10px;
+                    margin-top: 10px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -803,7 +833,11 @@
                 <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 Pregunta libre
             </span>
-            <a href="ia?limpiar=1" title="Borrar el historial y empezar de cero" style="margin-left:auto;background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;padding:5px 14px;font-size:0.8rem;color:var(--accent-blue);text-decoration:none;">Limpiar</a>
+            <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+            <a href="ia?limpiar=1" title="Borrar el historial y empezar de cero" style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;padding:5px 14px;font-size:0.8rem;color:var(--accent-blue);text-decoration:none;">Limpiar</a>
+            <% Object cR = session.getAttribute("consultasRestantes"); Object cL = session.getAttribute("limiteConsultas"); %>
+            <small style="color:var(--text-muted);font-size:0.72rem;" title="Dato real enviado por Groq en cada respuesta">⏳ <%= (cR instanceof Integer && (Integer) cR >= 0) ? cR + "/" + cL + " consultas restantes hoy" : "Cuota: 1000 consultas por día" %></small>
+            </div>
         </div>
 
         <!-- MENSAJES: historial completo de la sesión, lo último abajo -->
@@ -827,7 +861,7 @@
             </div>
             <% } else { %>
             <div class="message-wrapper ai">
-                <div class="message-bubble"><%= m.getRespuesta().getTextoHtml() %><br><br><small style="color:#7893A6;"><%= m.getTipo() %> · Tokens: <%= m.getRespuesta().getTokensEntrada() %> + <%= m.getRespuesta().getTokensSalida() %> = <%= m.getRespuesta().getTokensTotal() %></small></div>
+                <div class="message-bubble"><%= m.getRespuesta().getTextoHtml() %><br><br><small style="color:#7893A6;"><%= m.getTipo() %> · Tokens: <%= m.getRespuesta().getTokensTotal() %></small></div>
             </div>
             <% } } } %>
         </div>
@@ -858,7 +892,6 @@
     <!-- JAVASCRIPT -->
     <script>
         function sendMessage() {
-        function sendMessage() {
             // Envío real: el form hace POST al Servlet /ia
             document.getElementById('iaForm').submit();
         }
@@ -888,6 +921,10 @@
                 sendMessage();
             }
         });
+
+        // Al cargar, baja solo hasta la última respuesta
+        var cm = document.getElementById('chatMessages');
+        if (cm) { cm.scrollTop = cm.scrollHeight; }
     </script>
 </body>
 </html>

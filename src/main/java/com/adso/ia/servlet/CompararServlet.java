@@ -44,6 +44,9 @@ public class CompararServlet extends HttpServlet {
       // Mismo user, distinto system: ahí se ve que "cómo se pregunta" importa
       RespuestaIA a = s.preguntar(base + tono(tipoA), pregunta, temp);
       RespuestaIA b = s.preguntar(base + tono(tipoB), pregunta, temp);
+      // Consultas restantes reales (de la última llamada)
+      req.getSession().setAttribute("consultasRestantes", b.getConsultasRestantes());
+      req.getSession().setAttribute("limiteConsultas", b.getLimiteConsultas());
       req.setAttribute("respuestaA", a);
       req.setAttribute("respuestaB", b);
       req.setAttribute("tipoA", nombre(tipoA));

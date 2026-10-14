@@ -85,9 +85,24 @@ public class GroqService {
                 .getAsJsonObject("message").get("content").getAsString();
         JsonObject usage = json.getAsJsonObject("usage");
 
-        return new RespuestaIA(texto,
+        RespuestaIA r = new RespuestaIA(texto,
                 usage.get("prompt_tokens").getAsInt(),
                 usage.get("completion_tokens").getAsInt(),
                 usage.get("total_tokens").getAsInt());
+
+        // 5. Consultas restantes reales (cabeceras de Groq; -1 si no vienen)
+        int consRest = leerCabeceraEntera(respuesta, "x-ratelimit-remaining-requests");
+        int consLim = leerCabeceraEntera(respuesta, "x-ratelimit-limit-requests");
+        r.setCuotaConsultas(consRest, consLim);
+        return r;
+    }
+
+    private int leerCabeceraEntera(HttpResponse<String> respuesta, String nombre) {
+        try {
+            return respuesta.headers().firstValue(nombre)
+                    .map(v -> Integer.parseInt(v.trim())).orElse(-1);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }
