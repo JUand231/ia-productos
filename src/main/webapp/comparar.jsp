@@ -315,37 +315,6 @@
                 outline-offset: 2px;
             }
 
-            /* CREATIVIDAD */
-            .temp-row {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 0.8rem;
-            }
-
-            .temp-input {
-                width: 68px;
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
-                padding: 8px 10px;
-                font-size: 0.86rem;
-                color: var(--text-main);
-                background-color: var(--bg-card);
-                outline: none;
-                transition: border-color 0.2s, box-shadow 0.2s;
-            }
-
-            .temp-input:hover,
-            .temp-input:focus {
-                border-color: var(--accent-blue);
-                box-shadow: 0 0 0 3px rgba(63, 111, 143, 0.12);
-            }
-
-            .temp-hint {
-                color: var(--text-muted);
-                line-height: 1.3;
-            }
-
             /* PIE DE LA BARRA LATERAL */
             .sidebar-footer {
                 border-top: 1px solid var(--border-color);
@@ -744,14 +713,6 @@
                 </li>
             </ul>
 
-            <div class="history-category">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/></svg>
-                Creatividad
-            </div>
-            <div class="temp-row">
-                <input name="temperature" form="cmpForm" type="number" value="<%= request.getAttribute("tempVal") != null ? request.getAttribute("tempVal") : "0.7" %>" min="0" max="2" step="0.1" title="0 serio, 1 creativo" class="temp-input">
-                <span class="temp-hint">0 serio · 1 creativo</span>
-            </div>
         </div>
 
         <div class="sidebar-footer">

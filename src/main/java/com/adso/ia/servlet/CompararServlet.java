@@ -25,17 +25,12 @@ public class CompararServlet extends HttpServlet {
     if (pregunta == null || pregunta.isBlank()) pregunta = "Producto: Audífonos $150.000. Descríbelo.";
     if (tipoA == null) tipoA = "normal";
     if (tipoB == null) tipoB = "normal";
-    String tempParam = req.getParameter("temperature");
-    if (tempParam == null || tempParam.isBlank()) tempParam = "0.7";
 
     // Para que los selects no se reinicien: devolvemos lo que eligió
     req.setAttribute("tipoAVal", tipoA);
     req.setAttribute("tipoBVal", tipoB);
-    req.setAttribute("tempVal", tempParam);
 
     double temp = 0.7;
-    try { temp = Double.parseDouble(tempParam); }
-    catch (NumberFormatException e) { temp = 0.7; }
 
     try {
       GroqService s = new GroqService();

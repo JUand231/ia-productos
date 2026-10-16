@@ -314,37 +314,6 @@
                 outline-offset: 2px;
             }
 
-            /* CREATIVIDAD */
-            .temp-row {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 0.8rem;
-            }
-
-            .temp-input {
-                width: 68px;
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
-                padding: 8px 10px;
-                font-size: 0.86rem;
-                color: var(--text-main);
-                background-color: var(--bg-card);
-                outline: none;
-                transition: border-color 0.2s, box-shadow 0.2s;
-            }
-
-            .temp-input:hover,
-            .temp-input:focus {
-                border-color: var(--accent-blue);
-                box-shadow: 0 0 0 3px rgba(63, 111, 143, 0.12);
-            }
-
-            .temp-hint {
-                color: var(--text-muted);
-                line-height: 1.3;
-            }
-
             /* PIE DE LA BARRA LATERAL */
             .sidebar-footer {
                 border-top: 1px solid var(--border-color);
