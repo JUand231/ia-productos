@@ -32,11 +32,9 @@ respuesta en pantalla. Todo gira alrededor del ejemplo **"productos"**. SENA ADS
 - Modelo: `qwen/qwen3.8-27b` (gratis, ver `GroqService.java`). Se cambia con 1 línea.
 - Límites del plan gratis: 30 consultas/min, 1000/día, 8000 tokens/min. La app muestra las
   consultas restantes reales que reporta Groq.
-- `POST → redirect` (PRG): recargar la página NO reenvía ni gasta consultas.
-- La key nunca va al repo (ver `.gitignore` + `git log -S "gsk_"` limpio).
+- La key nunca va al repo (ver `.gitignore`limpio).
 
 ## Límites conocidos (material de expo)
 
-- El modelo no navega: su memoria tiene fecha de corte (ej.: sabe de gpt-oss de ago-2025,
-  pero no del iPhone 17 de sep-2025). La app lo advierte en cada respuesta de memoria.
+- El modelo no navega: su memoria tiene fecha de corte. La app lo advierte en cada respuesta de memoria.
 - La misma pregunta puede dar respuestas distintas (temperatura + no determinismo).
