@@ -52,14 +52,16 @@ public class CompararServlet extends HttpServlet {
       ses.setAttribute("respuestaB", b);
       ses.setAttribute("tipoA", nombre(tipoA));
       ses.setAttribute("tipoB", nombre(tipoB));
-      ses.setAttribute("pregunta", pregunta);
       ses.removeAttribute("error");
+      ses.removeAttribute("pregunta"); // éxito: la caja queda vacía para el próximo
     } catch (GroqException e) {
       ses.setAttribute("error", "Error " + e.getCodigoHttp() + ": " + e.getMessage());
+      ses.setAttribute("pregunta", pregunta); // error: se conserva para reintentar
       ses.removeAttribute("respuestaA");
       ses.removeAttribute("respuestaB");
     } catch (Exception e) {
       ses.setAttribute("error", "Error inesperado: " + e.getMessage());
+      ses.setAttribute("pregunta", pregunta); // error: se conserva para reintentar
       ses.removeAttribute("respuestaA");
       ses.removeAttribute("respuestaB");
     }

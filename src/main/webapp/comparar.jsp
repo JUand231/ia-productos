@@ -712,6 +712,12 @@
                     </a>
                 </li>
             </ul>
+            <% String tempVal = (String) request.getAttribute("tempVal"); if (tempVal == null) tempVal = (String) session.getAttribute("tempVal"); if (tempVal == null) tempVal = "0.7"; %>
+            <div class="history-category">Creatividad</div>
+            <div style="display:flex;align-items:center;gap:8px;margin:0 6px;font-size:0.75rem;color:var(--text-muted);">
+                <span title="0 serio, 2 creativo">Nivel</span>
+                <input name="temperature" form="cmpForm" type="number" value="<%= tempVal %>" min="0" max="2" step="0.1" title="0 serio, 2 creativo" style="width:58px;border:1px solid var(--border-color);border-radius:8px;padding:3px 6px;background:var(--bg-card);color:var(--text-main);">
+            </div>
 
         </div>
 
@@ -761,7 +767,6 @@
                 <div class="cmp-panel">
                     <div style="display:flex;justify-content:flex-start;margin-bottom:8px;">
                         <% String tipoAVal = (String) request.getAttribute("tipoAVal"); if (tipoAVal == null) tipoAVal = (String) session.getAttribute("tipoAVal"); if (tipoAVal == null) tipoAVal = "publicitario"; %>
-                        <% String tempVal = (String) request.getAttribute("tempVal"); if (tempVal == null) tempVal = (String) session.getAttribute("tempVal"); if (tempVal == null) tempVal = "0.7"; %>
                         <select name="tipoA" form="cmpForm" title="Tipo de respuesta izquierda" class="cmp-select">
                             <option value="normal" <%= "normal".equals(tipoAVal) ? "selected" : "" %>>Normal</option>
                             <option value="tecnico" <%= "tecnico".equals(tipoAVal) ? "selected" : "" %>>Técnico</option>
@@ -769,7 +774,6 @@
                             <option value="resena" <%= "resena".equals(tipoAVal) ? "selected" : "" %>>Reseña</option>
                             <option value="seo" <%= "seo".equals(tipoAVal) ? "selected" : "" %>>SEO</option>
                         </select>
-                        <input name="temperature" form="cmpForm" type="number" value="<%= tempVal %>" min="0" max="2" step="0.1" title="0 serio, 2 creativo" class="cmp-select" style="width:74px;margin-left:6px;">
                     </div>
                     <% com.adso.ia.model.RespuestaIA rA = (com.adso.ia.model.RespuestaIA) request.getAttribute("respuestaA"); if (rA == null) rA = (com.adso.ia.model.RespuestaIA) session.getAttribute("respuestaA"); if (rA != null) { %>
                     <h4>Izquierda · ${tipoA}</h4>
