@@ -1,6 +1,8 @@
 package com.adso.ia.model;
 
-public class RespuestaIA {
+public class RespuestaIA implements java.io.Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final String texto;
     private final int tokensEntrada;
