@@ -775,87 +775,91 @@
                 .p-card button:hover { background:var(--accent-blue); color:#fff; }
                 @media (max-width: 700px) { .prompt-grid { grid-template-columns:1fr; } }
             </style>
-            <p style="color:var(--text-muted);font-size:0.9rem;">Copia uno, pégalo en el chat y envíalo. 📦 trae datos, 🧠 la IA responde de memoria, ⚖️ es para probar en el Comparador.</p>
+            <p style="color:var(--text-muted);font-size:0.9rem;">Todo gira alrededor de <b>productos</b>. Copia uno, pégalo en el chat y envíalo. 📦 trae datos, 🧠 la IA responde de memoria, ⚖️ pareja del mismo producto con distinta instrucción: llévala al Comparador. El 1↔2 y el 3↔4 son el mismo producto pidiendo cosas distintas.</p>
             <div class="prompt-grid">
-<div class="p-card"><h3>1. 📦 Descripción corta</h3><p>Producto: Tenis deportivos
+<div class="p-card"><h3>1. 📦⚖️ Tenis: descríbelo</h3><p>Producto: Tenis deportivos
 Precio: $280.000
 Suela antideslizante, tallas 38 a 44.
-Descríbelo en 2 frases.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+Descríbelo en 2 frases, sin adornos.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>2. 📦 Publicitario</h3><p>Producto: Café orgánico 500g
+<div class="p-card"><h3>2. 📦⚖️ Mismo tenis: véndelo</h3><p>Producto: Tenis deportivos
+Precio: $280.000
+Suela antideslizante, tallas 38 a 44.
+Véndemelo en 2 frases que den ganas de comprarlo.
+(Mismos datos que el 1: compara las respuestas).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>3. 📦⚖️ Café: ficha técnica</h3><p>Producto: Café orgánico 500g
 Precio: $32.000
 Origen Huila, tueste medio.
-Escribe una descripción publicitaria corta para tienda online.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+Haz una ficha técnica ordenada.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>3. 📦 Reseña con pros y contras</h3><p>Producto: Audífonos inalámbricos
+<div class="p-card"><h3>4. 📦⚖️ Mismo café: post</h3><p>Producto: Café orgánico 500g
+Precio: $32.000
+Origen Huila, tueste medio.
+Escríbeme un post corto para Instagram con 3 hashtags.
+(Mismos datos que el 3: compara las respuestas).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>5. 📦 Audífonos: pros y contras</h3><p>Producto: Audífonos inalámbricos
 Precio: $150.000
 Batería 20 horas, Bluetooth 5.3.
 Dame una reseña honesta con pros y contras.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>4. 🧠 El más famoso de Avon</h3><p>¿Cuál es el producto más famoso de Avon?
-Descríbelo en 3 líneas.
-(Sin datos: la IA responde de memoria).</p><button onclick="copiar(this)">📋 Copiar</button></div>
-
-<div class="p-card"><h3>5. 🧠 Top 1 en ventas de Avon</h3><p>¿Cuál es el top 1 en ventas de Avon?
-Descríbelo y dime hasta qué año llega tu información.</p><button onclick="copiar(this)">📋 Copiar</button></div>
-
-<div class="p-card"><h3>6. 🧠 Duelo de marcas</h3><p>Compara Coca-Cola y Pepsi en 3 líneas:
-sabor, precio y cuál prefieren los jóvenes.</p><button onclick="copiar(this)">📋 Copiar</button></div>
-
-<div class="p-card"><h3>7. 🧠 Historia de marca</h3><p>Cuéntame la historia de la marca Nokia en 5 líneas:
-auge, caída y en qué anda hoy.</p><button onclick="copiar(this)">📋 Copiar</button></div>
-
-<div class="p-card"><h3>8. 📦 Ficha técnica</h3><p>Producto: Bicicleta urbana
-Precio: $850.000
-Rin 29, 21 cambios, freno de disco.
-Haz una ficha técnica ordenada.</p><button onclick="copiar(this)">📋 Copiar</button></div>
-
-<div class="p-card"><h3>9. 📦 Texto SEO</h3><p>Producto: Jabón artesanal de avena
+<div class="p-card"><h3>6. 📦 Jabón: texto SEO</h3><p>Producto: Jabón artesanal de avena
 Precio: $12.000
 Piel sensible, 100g.
 Escribe título SEO y descripción con palabras clave.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>10. 📦 Post Instagram</h3><p>Producto: Gorra bordada
+<div class="p-card"><h3>7. 📦 Gorra: post Instagram</h3><p>Producto: Gorra bordada
 Precio: $45.000
 Talla única ajustable.
 Escríbeme un post corto para Instagram con 3 hashtags.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>11. 📦 Mensaje WhatsApp</h3><p>Producto: Anchetas de cumpleaños
+<div class="p-card"><h3>8. 📦 Anchetas: mensaje WhatsApp</h3><p>Producto: Anchetas de cumpleaños
 Precio: $75.000
 Incluye tarjeta personalizada.
 Escríbelo en 1 frase para vender por WhatsApp.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>12. 📦 Ideas de fotos</h3><p>Producto: Aretes de plata
+<div class="p-card"><h3>9. 📦 Aretes: ideas de fotos</h3><p>Producto: Aretes de plata
 Precio: $55.000
 Dame 5 ideas de fotos para publicarlos en redes.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>13. 📦 Nombre de marca</h3><p>Producto: Mermelada de mora hecha en casa
+<div class="p-card"><h3>10. 📦 Mermelada: nombre de marca</h3><p>Producto: Mermelada de mora hecha en casa
 Precio: $15.000 frasco.
 Dame 5 ideas de nombre para la marca.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>14. 📦 Eslogan</h3><p>Producto: Panadería de barrio
+<div class="p-card"><h3>11. 📦 Panadería: eslóganes</h3><p>Producto: Panadería de barrio
 Pan fresco desde las 5am.
 Dame 3 eslóganes cortos.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>15. 📦 Responder "está caro"</h3><p>Producto: Curso de repostería
+<div class="p-card"><h3>12. 📦 Curso: responder "está caro"</h3><p>Producto: Curso de repostería
 Precio: $120.000, 4 clases.
 Un cliente dice "está muy caro". Dame una respuesta amable que lo convenza.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>16. 📦 Armar combo</h3><p>Producto A: Shampoo sólido $25.000.
+<div class="p-card"><h3>13. 📦 Combo: shampoo + acondicionador</h3><p>Producto A: Shampoo sólido $25.000.
 Producto B: Acondicionador sólido $28.000.
 Arma una oferta combo con precio y texto de venta.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>17. 📦 Precio desde el costo</h3><p>Producto: Velas aromáticas
+<div class="p-card"><h3>14. 📦 Velas: precio desde el costo</h3><p>Producto: Velas aromáticas
 Me cuesta hacerlo: $18.000
 Quiero ganar el 40%.
 ¿A cuánto lo vendo y por qué?</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>18. 📦 Correo lanzamiento</h3><p>Producto: Termo acero 750ml
+<div class="p-card"><h3>15. 📦 Termo: correo lanzamiento</h3><p>Producto: Termo acero 750ml
 Precio: $60.000
 Frío 24h, calor 12h.
 Redacta un correo corto anunciando su lanzamiento.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
-<div class="p-card"><h3>19. 🧠 ¿Qué es una ruana?</h3><p>Explica qué es una ruana, de qué está hecha
+<div class="p-card"><h3>16. 🧠 Avon: famoso y top ventas</h3><p>¿Cuál es el producto más famoso de Avon y cuál es su top 1 en ventas?
+Descríbelos y dime hasta qué año llega tu información.
+(Sin datos: la IA responde de memoria).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>17. 🧠 Historia de Nokia</h3><p>Cuéntame la historia de la marca Nokia en 5 líneas:
+auge, caída y en qué anda hoy.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>18. 🧠 Duelo Coca vs Pepsi</h3><p>Compara Coca-Cola y Pepsi en 3 líneas:
+sabor, precio y cuál prefieren los jóvenes.</p><button onclick="copiar(this)">📋 Copiar</button></div>
+
+<div class="p-card"><h3>19. 🧠 La ruana boyacense</h3><p>Explica qué es una ruana, de qué está hecha
 y para qué sirve, en 3 líneas.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
 <div class="p-card"><h3>20. ⚖️ Para el Comparador</h3><p>Producto: Reloj inteligente

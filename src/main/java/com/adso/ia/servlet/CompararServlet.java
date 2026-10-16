@@ -28,10 +28,11 @@ public class CompararServlet extends HttpServlet {
     String tempParam = req.getParameter("temperature");
     if (tempParam == null || tempParam.isBlank()) tempParam = "0.7";
 
-    // Para que los selects no se reinicien: devolvemos lo que eligió
-    req.setAttribute("tipoAVal", tipoA);
-    req.setAttribute("tipoBVal", tipoB);
-    req.setAttribute("tempVal", tempParam);
+    // En sesión (no en request): así sobreviven a la redirección de abajo
+    javax.servlet.http.HttpSession ses = req.getSession();
+    ses.setAttribute("tipoAVal", tipoA);
+    ses.setAttribute("tipoBVal", tipoB);
+    ses.setAttribute("tempVal", tempParam);
 
     double temp = 0.7;
     try { temp = Double.parseDouble(tempParam); }
@@ -40,24 +41,30 @@ public class CompararServlet extends HttpServlet {
     try {
       GroqService s = new GroqService();
       // Misma base neutra para los dos lados: con datos se basa en ellos, sin datos usa su memoria
-      String base = "Eres asistente de tienda online. Responde en español de forma neutra y directa, sin adjetivos emocionales. Si te dan datos de un producto, basate en ellos y menciónalos. Si no te dan datos, responde con tu conocimiento general; si preguntan por datos actuales (precios, rankings, top de ventas), responde con lo más conocido aclarando que tu información llega hasta 2024 y debe verificarse. Separa las ideas con saltos de línea.";
+      String base = "Eres asistente de tienda online. Responde en español de forma neutra y directa, sin adjetivos emocionales. Si te dan datos de un producto, basate en ellos y menciónalos. Si no te dan datos, responde con tu conocimiento general; si preguntan por datos actuales (precios, rankings, top de ventas), responde con lo más conocido aclarando que tu información puede estar desactualizada y debe verificarse. Separa las ideas con saltos de línea.";
       // Mismo user, distinto system: ahí se ve que "cómo se pregunta" importa
       RespuestaIA a = s.preguntar(base + tono(tipoA), pregunta, temp);
       RespuestaIA b = s.preguntar(base + tono(tipoB), pregunta, temp);
       // Consultas restantes reales (de la última llamada)
       req.getSession().setAttribute("consultasRestantes", b.getConsultasRestantes());
       req.getSession().setAttribute("limiteConsultas", b.getLimiteConsultas());
-      req.setAttribute("respuestaA", a);
-      req.setAttribute("respuestaB", b);
-      req.setAttribute("tipoA", nombre(tipoA));
-      req.setAttribute("tipoB", nombre(tipoB));
-      req.setAttribute("pregunta", pregunta);
+      ses.setAttribute("respuestaA", a);
+      ses.setAttribute("respuestaB", b);
+      ses.setAttribute("tipoA", nombre(tipoA));
+      ses.setAttribute("tipoB", nombre(tipoB));
+      ses.setAttribute("pregunta", pregunta);
+      ses.removeAttribute("error");
     } catch (GroqException e) {
-      req.setAttribute("error", "Error " + e.getCodigoHttp() + ": " + e.getMessage());
+      ses.setAttribute("error", "Error " + e.getCodigoHttp() + ": " + e.getMessage());
+      ses.removeAttribute("respuestaA");
+      ses.removeAttribute("respuestaB");
     } catch (Exception e) {
-      req.setAttribute("error", "Error inesperado: " + e.getMessage());
+      ses.setAttribute("error", "Error inesperado: " + e.getMessage());
+      ses.removeAttribute("respuestaA");
+      ses.removeAttribute("respuestaB");
     }
-    req.getRequestDispatcher("comparar.jsp").forward(req, res);
+    // PRG: redirigir en vez de reenviar. Así recargar NO repite las 2 consultas.
+    res.sendRedirect("comparar.jsp");
   }
 
   private String tono(String tipo) {
@@ -77,6 +84,15 @@ public class CompararServlet extends HttpServlet {
   }
 
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    if ("1".equals(req.getParameter("limpiar"))) {
+      javax.servlet.http.HttpSession ses = req.getSession();
+      ses.removeAttribute("respuestaA");
+      ses.removeAttribute("respuestaB");
+      ses.removeAttribute("tipoA");
+      ses.removeAttribute("tipoB");
+      ses.removeAttribute("pregunta");
+      ses.removeAttribute("error");
+    }
     res.sendRedirect("comparar.jsp");
   }
 }
