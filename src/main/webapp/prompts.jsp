@@ -771,6 +771,7 @@
                 .p-card { background:var(--bg-card); border:1px solid var(--border-color); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px; }
                 .p-card h3 { color:var(--accent-blue); font-size:0.95rem; }
                 .p-card p { font-size:0.85rem; white-space:pre-wrap; background:var(--bg-main); border-radius:8px; padding:10px; flex:1; }
+                .p-card small.p-hint { font-size:0.75rem; color:var(--text-muted); }
                 .p-card button { align-self:flex-end; background:var(--chat-user-bg); color:var(--accent-blue); border:1px solid var(--border-color); border-radius:20px; padding:5px 14px; cursor:pointer; font-size:0.8rem; }
                 .p-card button:hover { background:var(--accent-blue); color:#fff; }
                 @media (max-width: 700px) { .prompt-grid { grid-template-columns:1fr; } }
@@ -785,8 +786,7 @@ Descríbelo en 2 frases, sin adornos.</p><button onclick="copiar(this)">📋 Cop
 <div class="p-card"><h3>2. 📦⚖️ Mismo tenis: véndelo</h3><p>Producto: Tenis deportivos
 Precio: $280.000
 Suela antideslizante, tallas 38 a 44.
-Véndemelo en 2 frases que den ganas de comprarlo.
-(Mismos datos que el 1: compara las respuestas).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+Véndemelo en 2 frases que den ganas de comprarlo.</p><small class="p-hint">Mismos datos que el 1: compara las respuestas.</small><button onclick="copiar(this)">📋 Copiar</button></div>
 
 <div class="p-card"><h3>3. 📦⚖️ Café: ficha técnica</h3><p>Producto: Café orgánico 500g
 Precio: $32.000
@@ -796,8 +796,7 @@ Haz una ficha técnica ordenada.</p><button onclick="copiar(this)">📋 Copiar</
 <div class="p-card"><h3>4. 📦⚖️ Mismo café: post</h3><p>Producto: Café orgánico 500g
 Precio: $32.000
 Origen Huila, tueste medio.
-Escríbeme un post corto para Instagram con 3 hashtags.
-(Mismos datos que el 3: compara las respuestas).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+Escríbeme un post corto para Instagram con 3 hashtags.</p><small class="p-hint">Mismos datos que el 3: compara las respuestas.</small><button onclick="copiar(this)">📋 Copiar</button></div>
 
 <div class="p-card"><h3>5. 📦 Audífonos: pros y contras</h3><p>Producto: Audífonos inalámbricos
 Precio: $150.000
@@ -850,8 +849,7 @@ Frío 24h, calor 12h.
 Redacta un correo corto anunciando su lanzamiento.</p><button onclick="copiar(this)">📋 Copiar</button></div>
 
 <div class="p-card"><h3>16. 🧠 Avon: famoso y top ventas</h3><p>¿Cuál es el producto más famoso de Avon y cuál es su top 1 en ventas?
-Descríbelos y dime hasta qué año llega tu información.
-(Sin datos: la IA responde de memoria).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+Descríbelos y dime hasta qué año llega tu información.</p><small class="p-hint">Sin datos: la IA responde de memoria.</small><button onclick="copiar(this)">📋 Copiar</button></div>
 
 <div class="p-card"><h3>17. 🧠 Historia de Nokia</h3><p>Cuéntame la historia de la marca Nokia en 5 líneas:
 auge, caída y en qué anda hoy.</p><button onclick="copiar(this)">📋 Copiar</button></div>
@@ -864,8 +862,7 @@ y para qué sirve, en 3 líneas.</p><button onclick="copiar(this)">📋 Copiar</
 
 <div class="p-card"><h3>20. ⚖️ Para el Comparador</h3><p>Producto: Reloj inteligente
 Precio: $199.000
-Monitor de sueño y ritmo cardíaco. Descríbelo.
-(Cópialo y llévalo al Comparador: Técnico vs Publicitario).</p><button onclick="copiar(this)">📋 Copiar</button></div>
+Monitor de sueño y ritmo cardíaco. Descríbelo.</p><small class="p-hint">Cópialo y llévalo al Comparador: Técnico vs Publicitario.</small><button onclick="copiar(this)">📋 Copiar</button></div>
             </div>
         </div>
     </div>
