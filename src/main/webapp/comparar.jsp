@@ -737,7 +737,7 @@
                 Comparador
             </span>
             <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
-            <a href="comparar.jsp" title="Limpiar los paneles y empezar de cero" style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;padding:5px 14px;font-size:0.8rem;color:var(--accent-blue);text-decoration:none;">Limpiar</a>
+            <a href="comparar?limpiar=1" title="Limpiar los paneles y empezar de cero" style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;padding:5px 14px;font-size:0.8rem;color:var(--accent-blue);text-decoration:none;">Limpiar</a>
             <% Object cR = session.getAttribute("consultasRestantes"); Object cL = session.getAttribute("limiteConsultas"); %>
             <small style="color:var(--text-muted);font-size:0.72rem;" title="Dato real enviado por Groq en cada respuesta">⏳ <%= (cR instanceof Integer && (Integer) cR >= 0) ? cR + "/" + cL + " consultas restantes hoy" : "Cuota: 1000 consultas por día" %></small>
             </div>
@@ -754,13 +754,14 @@
                 .cmp-hint { color:var(--text-muted); }
                 @media (max-width: 700px) { .cmp-wrap { flex-direction:column; } }
             </style>
-            <% if (request.getAttribute("error") != null) { %>
+            <% if (request.getAttribute("error") != null || session.getAttribute("error") != null) { %>
             <p style="color:#fff;background:#C0392B;border-radius:8px;padding:10px;">${error}</p>
             <% } %>
             <div class="cmp-wrap">
                 <div class="cmp-panel">
                     <div style="display:flex;justify-content:flex-start;margin-bottom:8px;">
-                        <% String tipoAVal = (String) request.getAttribute("tipoAVal"); if (tipoAVal == null) tipoAVal = "publicitario"; %>
+                        <% String tipoAVal = (String) request.getAttribute("tipoAVal"); if (tipoAVal == null) tipoAVal = (String) session.getAttribute("tipoAVal"); if (tipoAVal == null) tipoAVal = "publicitario"; %>
+                        <% String tempVal = (String) request.getAttribute("tempVal"); if (tempVal == null) tempVal = (String) session.getAttribute("tempVal"); if (tempVal == null) tempVal = "0.7"; %>
                         <select name="tipoA" form="cmpForm" title="Tipo de respuesta izquierda" class="cmp-select">
                             <option value="normal" <%= "normal".equals(tipoAVal) ? "selected" : "" %>>Normal</option>
                             <option value="tecnico" <%= "tecnico".equals(tipoAVal) ? "selected" : "" %>>Técnico</option>
@@ -768,10 +769,11 @@
                             <option value="resena" <%= "resena".equals(tipoAVal) ? "selected" : "" %>>Reseña</option>
                             <option value="seo" <%= "seo".equals(tipoAVal) ? "selected" : "" %>>SEO</option>
                         </select>
+                        <input name="temperature" form="cmpForm" type="number" value="<%= tempVal %>" min="0" max="2" step="0.1" title="0 serio, 2 creativo" class="cmp-select" style="width:74px;margin-left:6px;">
                     </div>
-                    <% if (request.getAttribute("respuestaA") != null) { %>
+                    <% com.adso.ia.model.RespuestaIA rA = (com.adso.ia.model.RespuestaIA) request.getAttribute("respuestaA"); if (rA == null) rA = (com.adso.ia.model.RespuestaIA) session.getAttribute("respuestaA"); if (rA != null) { %>
                     <h4>Izquierda · ${tipoA}</h4>
-                    <p style="flex:1;"><%= ((RespuestaIA) request.getAttribute("respuestaA")).getTextoHtml() %></p>
+                    <p style="flex:1;"><%= rA.getTextoHtml() %></p>
                     <small>Tokens: ${respuestaA.tokensTotal}</small>
                     <% } else { %>
                     <p class="cmp-hint">Aquí saldrá la respuesta izquierda…</p>
@@ -779,7 +781,7 @@
                 </div>
                 <div class="cmp-panel">
                     <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
-                        <% String tipoBVal = (String) request.getAttribute("tipoBVal"); if (tipoBVal == null) tipoBVal = "normal"; %>
+                        <% String tipoBVal = (String) request.getAttribute("tipoBVal"); if (tipoBVal == null) tipoBVal = (String) session.getAttribute("tipoBVal"); if (tipoBVal == null) tipoBVal = "normal"; %>
                         <select name="tipoB" form="cmpForm" title="Tipo de respuesta derecha" class="cmp-select">
                             <option value="normal" <%= "normal".equals(tipoBVal) ? "selected" : "" %>>Normal</option>
                             <option value="tecnico" <%= "tecnico".equals(tipoBVal) ? "selected" : "" %>>Técnico</option>
@@ -788,9 +790,9 @@
                             <option value="seo" <%= "seo".equals(tipoBVal) ? "selected" : "" %>>SEO</option>
                         </select>
                     </div>
-                    <% if (request.getAttribute("respuestaB") != null) { %>
+                    <% com.adso.ia.model.RespuestaIA rB = (com.adso.ia.model.RespuestaIA) request.getAttribute("respuestaB"); if (rB == null) rB = (com.adso.ia.model.RespuestaIA) session.getAttribute("respuestaB"); if (rB != null) { %>
                     <h4>${tipoB} · Derecha</h4>
-                    <p style="flex:1;"><%= ((RespuestaIA) request.getAttribute("respuestaB")).getTextoHtml() %></p>
+                    <p style="flex:1;"><%= rB.getTextoHtml() %></p>
                     <small>Tokens: ${respuestaB.tokensTotal}</small>
                     <% } else { %>
                     <p class="cmp-hint">Aquí saldrá la respuesta derecha…</p>

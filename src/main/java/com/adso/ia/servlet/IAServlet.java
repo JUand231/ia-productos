@@ -26,17 +26,20 @@ public class IAServlet extends HttpServlet {
         String pregunta = req.getParameter("pregunta");
         String tipoRespuesta = req.getParameter("tipoRespuesta");
         if (tipoRespuesta == null) tipoRespuesta = "normal";
+        String temperature = req.getParameter("temperature");
+        if (temperature == null || temperature.isBlank()) temperature = "0.7";
         if (pregunta == null || pregunta.isBlank()) pregunta = "Describe este producto.";
 
-        // Para que el sidebar no se reinicie: devolvemos lo que eligió
-        req.setAttribute("tipoSel", tipoRespuesta);
+        // En sesión (no en request): así sobreviven a la redirección de abajo
+        req.getSession().setAttribute("tipoSel", tipoRespuesta);
+        req.getSession().setAttribute("tempSel", temperature);
 
         RespuestaIA r = null;
         String error = null;
         try {
-            double temp = 0.7;
+            double temp = Double.parseDouble(temperature);
             // Normal: tono neutro, sin emoción. Con datos se basa en ellos, sin datos usa su memoria.
-            String system = "Eres asistente de tienda online. Responde en español de forma neutra y directa, sin adjetivos emocionales. Si te dan datos de un producto, basate en ellos y menciónalos. Si no te dan datos, responde con tu conocimiento general; si preguntan por datos actuales (precios, rankings, top de ventas), responde con lo más conocido aclarando que tu información llega hasta 2024 y debe verificarse. Separa las ideas con saltos de línea."
+            String system = "Eres asistente de tienda online. Responde en español de forma neutra y directa, sin adjetivos emocionales. Si te dan datos de un producto, basate en ellos y menciónalos. Si no te dan datos, responde con tu conocimiento general; si preguntan por datos actuales (precios, rankings, top de ventas), responde con lo más conocido aclarando que tu información puede estar desactualizada y debe verificarse. Separa las ideas con saltos de línea."
                     + tono(tipoRespuesta);
             // Todo llega en una sola caja: datos + instrucción juntos
             String user = (producto == null || producto.isBlank()) ? pregunta
@@ -48,6 +51,9 @@ public class IAServlet extends HttpServlet {
 
         } catch (GroqException e) {
             error = "Error " + e.getCodigoHttp() + ": " + e.getMessage();
+
+        } catch (NumberFormatException e) {
+            error = "La temperatura no es un número válido";
 
         } catch (Exception e) {
             error = "Error inesperado: " + e.getMessage();
@@ -63,7 +69,8 @@ public class IAServlet extends HttpServlet {
         historial.add(new MensajeChat(pregunta, r, error, nombre(tipoRespuesta)));
         if (historial.size() > 20) historial.remove(0);
 
-        req.getRequestDispatcher("index.jsp").forward(req, res);
+        // PRG: redirigir en vez de reenviar. Así recargar NO repite la consulta.
+        res.sendRedirect("index.jsp");
     }
 
     // Normal = base neutra. Los demás agregan un matiz al system.

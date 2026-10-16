@@ -712,7 +712,8 @@
                     </a>
                 </li>
             </ul>
-            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
+            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = (String) session.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
+            <% String tempSel = (String) request.getAttribute("tempSel"); if (tempSel == null) tempSel = (String) session.getAttribute("tempSel"); if (tempSel == null) tempSel = "0.7"; %>
 
             <div class="history-category">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
@@ -769,6 +770,10 @@
                         </div>
                     </div>
                 </label>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin:8px 6px 0 6px;font-size:0.75rem;color:var(--text-muted);">
+                <span title="0 serio, 2 creativo">Creatividad</span>
+                <input name="temperature" form="iaForm" type="number" value="<%= tempSel %>" min="0" max="2" step="0.1" title="0 serio, 2 creativo" style="width:58px;border:1px solid var(--border-color);border-radius:8px;padding:3px 6px;background:var(--bg-card);color:var(--text-main);">
             </div>
 
             <div class="history-category">
