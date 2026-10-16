@@ -94,8 +94,8 @@
                 display: flex;
                 align-items: center;
                 gap: 12px;
-                margin-bottom: 28px;
-                padding: 0 6px 22px;
+                margin-bottom: 12px;
+                padding: 0 6px 12px;
                 border-bottom: 1px solid var(--border-color);
             }
 
@@ -150,10 +150,10 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                font-size: 0.72rem;
+                font-size: 0.68rem;
                 text-transform: uppercase;
                 color: var(--text-muted);
-                margin: 18px 0 10px 6px;
+                margin: 12px 0 6px 6px;
                 font-weight: 600;
                 letter-spacing: 0.8px;
             }
@@ -164,32 +164,34 @@
             }
 
             .history-list + .history-category {
-                margin-top: 22px;
+                margin-top: 12px;
             }
 
             .history-item {
                 position: relative;
-                border-radius: 9px;
-                font-size: 0.92rem;
+                border-radius: 7px;
+                font-size: 0.8rem;
                 cursor: pointer;
                 color: var(--text-main);
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                margin-bottom: 4px;
+                margin-bottom: 2px;
                 transition: background 0.2s, color 0.2s;
             }
 
             .history-item a {
                 display: flex;
                 align-items: center;
-                gap: 12px;
-                padding: 10px 12px;
+                gap: 8px;
+                padding: 6px 8px;
                 color: inherit;
                 text-decoration: none;
             }
 
             .history-item .icon {
+                width: 14px;
+                height: 14px;
                 color: var(--text-muted);
                 transition: color 0.2s;
             }
@@ -220,12 +222,12 @@
                 background-color: var(--accent-blue);
             }
 
-            /* PERSONALIZACIÓN (opciones) */
+            /* PERSONALIZACIÓN (opciones) - compacto 40% para dar aire al Historial */
             /* PERSONALIZACIÓN (lista de opciones) */
             .option-group {
                 display: flex;
                 flex-direction: column;
-                gap: 4px;
+                gap: 2px;
             }
 
             .option-row {
@@ -242,18 +244,18 @@
             .option-row .row-body {
                 display: flex;
                 align-items: center;
-                gap: 12px;
-                padding: 9px 12px;
+                gap: 7px;
+                padding: 5px 8px;
                 border: 1px solid transparent;
-                border-radius: 10px;
+                border-radius: 7px;
                 transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
             }
 
             .option-row .dot {
-                width: 16px;
-                height: 16px;
+                width: 10px;
+                height: 10px;
                 flex-shrink: 0;
-                border: 1.5px solid var(--text-muted);
+                border: 1px solid var(--text-muted);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
@@ -263,8 +265,8 @@
 
             .option-row .dot::after {
                 content: "";
-                width: 8px;
-                height: 8px;
+                width: 5px;
+                height: 5px;
                 border-radius: 50%;
                 background-color: var(--accent-blue);
                 transform: scale(0);
@@ -274,18 +276,16 @@
             .option-row .row-text {
                 display: flex;
                 flex-direction: column;
-                line-height: 1.25;
+                line-height: 1.2;
             }
 
             .option-row .row-title {
-                font-size: 0.88rem;
+                font-size: 0.78rem;
                 color: var(--text-main);
             }
 
             .option-row .row-desc {
-                font-size: 0.72rem;
-                color: var(--text-muted);
-                margin-top: 1px;
+                display: none;
             }
 
             .option-row:hover .row-body {
@@ -313,37 +313,6 @@
             .option-row input:focus-visible + .row-body {
                 outline: 2px solid var(--accent-blue);
                 outline-offset: 2px;
-            }
-
-            /* CREATIVIDAD */
-            .temp-row {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 0.8rem;
-            }
-
-            .temp-input {
-                width: 68px;
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
-                padding: 8px 10px;
-                font-size: 0.86rem;
-                color: var(--text-main);
-                background-color: var(--bg-card);
-                outline: none;
-                transition: border-color 0.2s, box-shadow 0.2s;
-            }
-
-            .temp-input:hover,
-            .temp-input:focus {
-                border-color: var(--accent-blue);
-                box-shadow: 0 0 0 3px rgba(63, 111, 143, 0.12);
-            }
-
-            .temp-hint {
-                color: var(--text-muted);
-                line-height: 1.3;
             }
 
             /* PIE DE LA BARRA LATERAL */
@@ -743,7 +712,7 @@
                     </a>
                 </li>
             </ul>
-            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = (String) session.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
+            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
 
             <div class="history-category">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
@@ -803,13 +772,23 @@
             </div>
 
             <div class="history-category">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/></svg>
-                Creatividad
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l4 2"/></svg>
+                Historial
             </div>
-            <div class="temp-row">
-                <input name="temperature" form="iaForm" type="number" value="<%= request.getAttribute("tempSel") != null ? request.getAttribute("tempSel") : (session.getAttribute("tempSel") != null ? session.getAttribute("tempSel") : "0.7") %>" min="0" max="2" step="0.1" title="0 serio, 1 creativo" class="temp-input">
-                <span class="temp-hint">0 serio · 1 creativo</span>
-            </div>
+            <ul class="history-list" style="max-height:260px;flex-grow:1;min-height:100px;">
+                <% List<MensajeChat> hSide = (List<MensajeChat>) session.getAttribute("historial");
+                   if (hSide == null || hSide.isEmpty()) { %>
+                <li class="history-item"><a style="cursor:default;opacity:.7;">Sin chats aún</a></li>
+                <% } else { for (int hi = hSide.size() - 1; hi >= 0; hi--) { MensajeChat mh = hSide.get(hi); %>
+                <li class="history-item" title="<%= mh.getPreguntaHtml().replace("\"", "'") %>">
+                    <a href="#msg-<%= hi %>">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <%= mh.getTituloCorto().replace("<", "&lt;").replace(">", "&gt;") %>
+                    </a>
+                </li>
+                <% } } %>
+            </ul>
+
         </div>
 
         <div class="sidebar-footer">
@@ -851,8 +830,8 @@
                 <h2>¡Hola!</h2>
                 <p>Escribe abajo los datos de tu producto y lo que necesites: descripción, reseña o ideas de venta.</p>
             </div>
-            <% } else { for (MensajeChat m : historial) { %>
-            <div class="message-wrapper user">
+            <% } else { for (int mi = 0; mi < historial.size(); mi++) { MensajeChat m = historial.get(mi); %>
+            <div class="message-wrapper user" id="msg-<%= mi %>">
                 <div class="message-bubble"><%= m.getPreguntaHtml() %></div>
             </div>
             <% if (m.isError()) { %>

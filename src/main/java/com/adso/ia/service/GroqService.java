@@ -15,7 +15,7 @@ import java.time.Duration;
 public class GroqService {
 
     private static final String URL = "https://api.groq.com/openai/v1/chat/completions";
-    private static final String MODELO = "qwen/qwen3.8-27b";
+    private static final String MODELO = "openai/gpt-oss-20b";
 
     private final HttpClient cliente = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
