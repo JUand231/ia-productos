@@ -712,7 +712,7 @@
                     </a>
                 </li>
             </ul>
-            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = (String) session.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
+            <% String tipoSel = (String) request.getAttribute("tipoSel"); if (tipoSel == null) tipoSel = "normal"; %>
 
             <div class="history-category">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
@@ -774,12 +774,6 @@
             <div class="history-category">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l4 2"/></svg>
                 Historial
-                <svg class="icon" viewBox="0 0 24 24"><path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/></svg>
-                Creatividad
-            </div>
-            <div class="temp-row">
-                <input name="temperature" form="iaForm" type="number" value="<%= request.getAttribute("tempSel") != null ? request.getAttribute("tempSel") : (session.getAttribute("tempSel") != null ? session.getAttribute("tempSel") : "0.7") %>" min="0" max="2" step="0.1" title="0 serio, 1 creativo" class="temp-input">
-                <span class="temp-hint">0 serio · 1 creativo</span>
             </div>
             <ul class="history-list" style="max-height:260px;flex-grow:1;min-height:100px;">
                 <% List<MensajeChat> hSide = (List<MensajeChat>) session.getAttribute("historial");
